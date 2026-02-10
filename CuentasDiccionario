@@ -1,0 +1,112 @@
+/***************************************** server *****************************************/
+
+https://intelisishelpdesk.freshservice.com/support/tickets?wf_filter=all&wf_order=created_at&wf_order_type=desc&per_page=10&page=1
+
+soporte@navitek.com.mx
+nLU800822SX4
+
+
+jrivera4
+
+Hyundai*9DY23
+
+cLQDHgkhtpz2E.
+
+EXEC xpVentasCuota
+
+jmartinez
+Jess0920
+
+Usuario:            JRIVERA4
+Contreaseña:  phoning-PvBfATH
+Servidor de Base de datos (SQL) y aplicativo
+navi2:D
+C:\Intelisis\6000_v15
+Base productiva
+Navilux  (INTELISIS)
+IPNavitek  (MES)
+
+Base de pruebas 
+NVTEST (INTELISIS)
+COSTOS (INTELISIS)
+CONTAMES (INTELISIS)
+IPNavitekPruebas (MES)
+
+
+Servidor de Aplicativo   (Intelisis)
+NAVI4.navitek.local:3444
+C:\Intelisis\6000_v15
+
+
+/****** Tablas ******/
+ --claveSAT
+ select * from SATArticuloInfo
+
+EXEC msdb.dbo.sp_send_dbmail
+	@recipients = @Para,
+	@Copy_recipients = @Copy,
+	@subject = @strsubject,
+	@body = @tableHTML,
+	@body_format = 'HTML',
+	@profile_name = 'Soporte Help Desk'
+
+SELECT * 
+FROM MSDB.DBO.sysmail_event_log where mailitem_id in (SELECT mailitem_id FROM MSDB.DBO.sysmail_allitems where sent_status <> 'sent' and 
+--recipients in ('mariana.ruiz@navitek.com.mx','sergio.nolasco@navitek.com.mx')and 
+recipients like '%reymo.ventas%'  )	
+
+EXEC spMovEnviarIntelisis
+
+
+
+
+
+
+/****** orrdenar con ROW_NUMBER ******/
+SELECT  ID
+		,ROW_NUMBER() OVER(order BY Articulo)*2048 AS Renglon   
+		,RenglonSub 
+		,ROW_NUMBER() OVER(order BY Articulo)  AS RenglonID
+		,RenglonTipo   
+  INTO #VentaDOrden
+  FROM VENTAD
+ WHERE ID=@ID   
+ ORDER BY ARTICULO ASC
+
+/****** duplicados con OVER(PARTITION ******/
+
+ 			  SELECT TOP 1 '@Articulo' = Articulo
+			    FROM (
+						SELECT Articulo, COUNT(*) OVER(PARTITION BY Articulo) AS Duplicados
+						  FROM InvD
+						 WHERE ID = 174234
+				) TablaDuplicados
+			   WHERE Duplicados > 1
+
+/****** FActuras con cantidades diferentes en pedido y  ******/
+SELECT b.Aplica, b.AplicaID, b.Articulo, b.SustitutoArticulo, SUM(b.Cantidad)
+FROM Venta a
+JOIN VentaD b On a.ID = b.ID
+WHERE a.ID = 126016--@ID
+GROUP BY b.Articulo, b.Aplica, b.AplicaID,  b.SustitutoArticulo
+
+--busca la cantidad en el pedido
+SELECT '@CantidadPendiente' = ISNULL(SUM(ISNULL(c.Cantidad,0)),0)
+FROM Venta a
+JOIN Venta b ON a.Empresa = b.Empresa AND b.Mov = 'PET' AND b.MovID = '11279'
+JOIN VentaD c ON b.ID = c.ID
+WHERE a.ID = 126016--@ID
+AND b.Estatus NOT IN ('SINAFECTAR','CANCELADO')
+AND c.Articulo = ISNULL(NULL,'92457215062')
+
+--busca otro movimiento en ventas que tenga el mismo articulo para
+SELECT '@CantidadOrdenada' = ISNULL(SUM(ISNULL(c.Cantidad,0)),0)
+FROM Venta a
+JOIN Venta b ON a.Empresa = b.Empresa AND a.Mov = b.Mov
+JOIN VentaD c ON b.ID = c.ID AND c.Aplica = 'PET' AND c.AplicaID = '11279'
+WHERE a.ID = 126016--@ID
+AND b.Estatus IN ('PENDIENTE','CONCLUIDO')
+AND c.Articulo =ISNULL(NULL,'92457215062')
+
+
+
