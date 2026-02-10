@@ -59,7 +59,33 @@ EXEC spMovEnviarIntelisis
 
 
 
+/*
 
+SELECT Estatus, * 
+FROM Venta
+ORDER BY id DESC
+
+*/
+
+DECLARE
+  @Estacion			INT = @@SPID,			
+  @Empresa			varchar(5) = 'DEMO',
+  @Modulo			varchar(5) = 'VTAS',		
+  @Mov				varchar(20) = 'Factura Flexible',
+  @ID				INT = 1066,
+  @eDoc				varchar(50) = 'CFDI_3.3',
+  @Estatus			varchar(15) = 'CONCLUIDO',
+  @Registrar		bit = 1,
+  @CFDFlex			bit = 0,
+  @XMLAdenda		varchar(max),
+  @Ok				int,
+  @OkRef			varchar(255),
+  @LlamadaExterna	bit = 0,
+  @Contacto			varchar(10) = NULL
+
+EXEC speDocXML @Estacion, @Empresa, @Modulo, @Mov, @ID, @eDoc, @Estatus, 0, 1, @XMLAdenda OUTPUT, @Ok OUTPUT, @OkRef OUTPUT, @LlamadaExterna, @Contacto
+
+SELECT @XMLAdenda, @Ok, @OkRef, CONVERT(XML, @XMLAdenda)
 
 
 /****** orrdenar con ROW_NUMBER ******/
