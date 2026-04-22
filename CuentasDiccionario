@@ -149,3 +149,11 @@ exec spCorregirAuxiliarU 764178, 0.0,NULL, 0.0, NULL, NULL, NULL
 select top 10 * from AuxiliarU where Rama = 'INV' and Mov = 'Entrada Produccion' and Movid = 'PM21901'  and ModuloID = 179827
 rollback tran
 select * from ArtExistenciaNeta where Articulo = 'ESP116202' and almacen = '1A'
+
+
+select * from versionpaquetelog where Paquete like '%Canc%'
+
+
+
+
+
