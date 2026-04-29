@@ -157,3 +157,27 @@ select * from versionpaquetelog where Paquete like '%Canc%'
 
 
 
+/************************ spsrielotesmayoreo  *************************************/
+
+SELECT NULLIF(RTRIM(SerieLote), ''), '@Cantidad'=ISNULL(Cantidad, 0.0)/**@Factor*/, ISNULL(CantidadAlterna, 0.0)/**@Factor*/, NULLIF(RTRIM(Propiedades), ''), NULLIF(RTRIM(Cliente), ''), NULLIF(RTRIM(Localizacion), '')--, ISNULL(NULLIF(ArtCostoInv, 0), @ArtCostoInv) / @Factor, FechaCaducidad, Virtual, SerieLoteVirtual
+FROM SerieLoteMov
+WHERE Empresa   = 'NVK'
+AND Modulo    = 'INV'
+AND ID        = 214061
+AND RenglonID = 5
+AND Articulo  = 'K536003'
+AND NULLIF(RTRIM(SubCuenta), '') = NULL
+
+
+--select sucursal,* from Alm where Almacen = '2140'
+--10.1
+SELECT *-- '@ExistenciaAnterior' = Existencia
+--update SerieLote set Existencia = '11.05' 
+FROM SerieLote
+WHERE Sucursal  = 1
+AND Empresa   = 'NVK'
+AND Articulo  = 'K536003'
+AND ISNULL(SubCuenta,'') = ''
+AND SerieLote = '06032026OC3582'
+AND Almacen   = '2140'
+AND ISNULL(Tarima,'')    = ''
