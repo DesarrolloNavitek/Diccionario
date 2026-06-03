@@ -181,3 +181,35 @@ AND ISNULL(SubCuenta,'') = ''
 AND SerieLote = '06032026OC3582'
 AND Almacen   = '2140'
 AND ISNULL(Tarima,'')    = ''
+
+/********************************************************** MES **********************************************************/
+
+
+
+select *from TLotreser where hijo='k217507'
+
+select * from TFreserva where hijo='k217507'
+select * from TCLanza where lanzamiento IN (26406, 26415)
+
+
+--SELECT STOCK,CantCursoFabric,Almacen, *FROM MLOTES WHERE CODIGOARTICULO='k217507' AND STOCK<>0
+
+--SELECT *FROM NAVILUX..SERIELOTE WHERE Articulo='k217507' AND Existencia IS NOT NULL
+
+SELECT STOCK,CantCursoFabric,Almacen, *FROM IPNavitek..MLOTES WHERE CODIGOARTICULO='k217507' AND STOCK<>0 and numerolote ='IMP-441'
+
+SELECT * FROM NAVILUX..SERIELOTE WHERE Articulo='k217507' AND SerieLote = 'IMP-441'
+
+select *from tfreserva where hijo='k217507'
+ 
+select *from TFreservaReproceso where hijo='k217507'
+ 
+select UnidReservadas,*from MArticulo where CodigoArticulo='k217507'
+select *from TLotreser where hijo='k217507'
+
+
+
+
+
+
+
