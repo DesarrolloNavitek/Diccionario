@@ -207,7 +207,7 @@ select *from TFreservaReproceso where hijo='k217507'
 select UnidReservadas,*from MArticulo where CodigoArticulo='k217507'
 select *from TLotreser where hijo='k217507'
 
-
+select * from TObservacionesART where codigo =''
 
 
 
