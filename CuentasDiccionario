@@ -209,6 +209,11 @@ select *from TLotreser where hijo='k217507'
 
 select * from TObservacionesART where codigo =''
 
+solo es ejecutar el update a cero de la sucursal y procesar pedidos desde la lanzadera
+
+--UPDATE VentaMES SET Sucursal=0,EstatusIntelIMES=0 WHERE NumerodePedido='PSE 234'
+
+--UPDATE VentaDMES SET Sucursal=0,EstatusIntelIMES=0 WHERE NumerodePedido='PSE 234'
 
 
 
