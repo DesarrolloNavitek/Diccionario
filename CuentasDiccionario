@@ -134,7 +134,55 @@ WHERE a.ID = 126016--@ID
 AND b.Estatus IN ('PENDIENTE','CONCLUIDO')
 AND c.Articulo =ISNULL(NULL,'92457215062')
 
+/****** Salidas diversas ******/
+DECLARE @id int = 241218,
+@Almacen		varchar(10) = '15'
 
+
+INSERT INTO InvD (ID,
+Renglon, 
+RenglonSub, 
+RenglonID, 
+RenglonTipo, 
+Almacen, 
+Codigo, 
+Articulo,
+Cantidad, 
+ContUso, 
+Unidad, 
+Factor, 
+CantidadInventario, 
+FechaRequerida,
+Sucursal, 
+SucursalOrigen)
+
+SELECT @id, 
+ROW_NUMBER() OVER(order BY Articulo)*2048,
+0,
+RenglonId,
+'L',
+@Almacen,
+NULL,
+Articulo,
+Cantidad,
+Centro_costos,
+NULL,
+1,
+NULL,
+GETDATE(),
+0,
+0
+FROM Temporal_Inv
+
+
+INSERT INTO SerieLoteMov (Sucursal, Empresa, Modulo, ID, RenglonID, Articulo, SubCuenta, SerieLote, Cantidad, CantidadAlterna, Propiedades, Ubicacion, Cliente, Localizacion, FechaCaducidad, Virtual)
+
+SELECT Sucursal, 'NVK','INV',ID,a.RenglonID,a.Articulo,'',Series_Lotes,a.Cantidad, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+  FROM InvD a
+  LEFT JOIN Temporal_Inv b ON a.Articulo = b.articulo and a.RenglonID = b.RenglonID
+ WHERE Id=@id
+
+drop table Temporal_Inv
 
 
 
