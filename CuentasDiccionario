@@ -165,7 +165,7 @@ RenglonId,
 @Almacen,
 NULL,
 Articulo,
-Cantidad,
+ROUND(Cantidad,4),
 Centro_costos,
 NULL,
 Tarima,
@@ -179,7 +179,7 @@ FROM Temporal_Inv
 
 INSERT INTO SerieLoteMov (Sucursal, Empresa, Modulo, ID, RenglonID, Articulo, SubCuenta, SerieLote, Cantidad, CantidadAlterna, Propiedades, Ubicacion, Cliente, Localizacion, FechaCaducidad, Virtual)
 
-SELECT Sucursal, 'NVK','INV',ID,a.RenglonID,a.Articulo,'',Series_Lotes,a.Cantidad, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+SELECT Sucursal, 'NVK','INV',ID,a.RenglonID,a.Articulo,'',Series_Lotes,ROUND(a.Cantidad,4), NULL, NULL, NULL, NULL, NULL, NULL, NULL
   FROM InvD a
   LEFT JOIN Temporal_Inv b ON a.Articulo = b.articulo and a.RenglonID = b.RenglonID
  WHERE Id=@id
